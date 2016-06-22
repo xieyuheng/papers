@@ -2,7 +2,6 @@
 
 build:
 	pdflatex function-compose-type-cut.tex
-	rm -f *.log *.dvi *.aux
 
 clean:
 	@

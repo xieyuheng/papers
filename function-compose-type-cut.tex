@@ -2,11 +2,9 @@
 % 10pt          To set in 10-point type instead of 9-point.
 % 11pt          To set in 11-point type instead of 9-point.
 % numbers       To obtain numeric citation style instead of author/year.
-%% \documentclass[preprint,10pt]{sigplanconf}
-\documentclass{sigplanconf}
-
+% \documentclass[numbers,10pt]{sigplanconf}
+\documentclass[numbers]{sigplanconf}
 \usepackage{amsmath}
-
 \newcommand{\cL}{{\cal L}}
 
 \begin{document}
@@ -27,14 +25,13 @@
 %% \preprintfooter{short description of paper}   % 'preprint' option specified.
 
 \title{Function compose, Type cut, And the Algebra of logic}
-%% \subtitle{Subtitle Text, if any}
-\authorinfo{XIE Yuheng} {a math student of China} {xyheme@gmail.com}
+\authorinfo{XIE Yuheng}{SZDIY community}{xyheme@gmail.com}
 \maketitle
 
 \begin{abstract}
   In this paper, I demonstrate the Curry-–Howard correspondence of Gentzen's sequent calculus,
   and give a very rich algebraic structure of the corresponding deduction system.
-  By such demonstration, I propose then a prototype implementation of a programming language, written in scheme, which uses sequent calculus as its dependent type system.
+  I introduce then a prototype implementation of a programming language, written in scheme, which uses sequent calculus as its dependent type system.
 \end{abstract}
 
 %% \category{CR-number}{subcategory}{third-level}
@@ -46,15 +43,15 @@ deduction system,
 sequent calculus,
 algebraic structure.
 
-\section{introduction}
+\section{Introduction}
 
 \subsection{Curry--Howard correspondence of sequent calculus}
 
-some said (for example, see the wikipedia page of ``Curry--Howard correspondence'', at the time when this paper is written),
+Some said that
 in the framework of Curry--Howard correspondence,
 Gentzen's sequent calculus does not correspond with
 a well-defined pre-existing model of computation,
-as it was for Hilbert-style and natural deduction.
+as it was for Hilbert-style and natural deduction. \cite{wikipedia}
 
 in this paper, I will show that
 we can get what sequent calculus corresponds to,
@@ -67,92 +64,76 @@ the syntax of which is optimized for function composition
 instead of function application.
 
 I will also show the trade-off of this syntax design. \\
-(1) the syntax of type and function-body are unified. \\
-(2) we lose the implicit syntax for currying. \\
-(3) we gain the algebraic associative law.
+(1) The syntax of type and function-body are unified. \\
+(2) We lose the implicit syntax for currying. \\
+(3) We gain the algebraic associative law.
 
-\subsection{the Algebra of logic}
+\subsection{The Algebra of logic}
 
-some also said (for example, see the first chapter of ``Homotopy Type Theory''),
+Some also said that
 deduction system can be viewed as algebraic structure,
 where theorems are the elements (like elements of group),
-where deductive rules are the operations (like multiplication of group).
+where deductive rules are the operations (like multiplication of group). \cite{Hott}
 
-in this paper, I will show that
+In this paper, I will show that
 with the associative law which we obtained from function composition,
 the corresponding deduction system of our programming language
 not merely ``can be viewed as'' algebraic structure,
 but actually has a very rich algebraic structure.
 
-\subsection{implementation}
+\subsection{Implementation}
 
 I will also introduce a prototype implementation of such a language.
 I call it ``sequent1''.
 
-\section{background}
+\section{Background}
 
-\subsection{how the idea was conceived}
+\subsection{How the idea was conceived}
 
-two years ago,
+Two years ago,
 for some reason, I learned the design of the stack-based language -- forth.
 I began to write my own forth-like language,
 and tried to add various features to it.
-soon I found another forth-like language -- joy.
-from joy I learned the composition v.s. application trade-off in syntax.
+Soon I found another forth-like language -- joy.
+From joy I learned the composition v.s. application trade-off in syntax.
 
 I added more and more features to my forth-like language.
-things went well, until I tried to add a type system to the it.
+Things went well, until I tried to add a type system to the it.
 I found that
 to design a good type system,
 a designer has to know Curry--Howard correspondence well.
 
-and after some learning,
-I figured that
+Then I figured that
 the composition v.s. application trade-off in syntax,
 corresponds to
 the sequent-calculus v.s. natural-deduction in proof theory.
 
-I tried to add such a sequent-calculus type system
-to the forth-like language several times.
-I failed.
-because the implementation is written in assembly language,
-the low-level detailed code would soon exceed the complexity
-that a normal people like me can manage.
-
-I steped back.
-I decided to write a prototype language in scheme.
-the prototype only limited to demonstrate the main idea of ``sequent-calculus as type system''.
+Finally I decided to write a prototype language in scheme,
+only to demonstrate the idea of ``sequent-calculus as type system'', \\
 thus I wrote ``sequent1''.
 
-\subsection{related works}
+\subsection{Related works}
 
-there are many other works
+There are many other works
 that assign computational models to sequent-calculus-like logics.
-for example:
+For example, Frank Pfenning assigned concurrent programming to linear logic. \cite{Pfenning}
 
-{\scriptsize\begin{verbatim}
-| people         | logic        | model                  |
-|----------------+--------------+------------------------|
-| Frank Pfenning | linear logic | concurrent programming |
-|                |              |                        |
-\end{verbatim}}
+Maybe one logic system can correspond to multiple computational models.
+Maybe more terminologys should be carefully coined,
+and new framework and theory should be wisely designed,
+under which the correspondences between deduction systems and computational models could be elegantly described.
 
-maybe one logic system can correspond to multiple computational models.
-maybe more terminologys should be carefully coined,
-and more general framework theory should be wisely designed,
-to describe correspondences between deduction systems and computational models.
-
-\section{the change of syntax}
+\section{The change of syntax}
 
 I will introduce my syntax by comparing it with
-the syntax of an imaginary agda-like (or idris-like) language. \\
+the syntax of an imaginary agda-like (or idris-like) language. \cite{Norell} \cite{{Brady}} \\
 I will mark its syntax by {\scriptsize\verb|<< application-language >>|}, \\
 and I will mark my new syntax by {\scriptsize\verb|<< composition-language >>|}.
 
-\subsection{natural number}
+\subsection{Natural number}
 
 {\scriptsize\begin{verbatim}
-<< application-language >>
+;; << application-language >>
 
 data natural : type where
   zero : natural
@@ -165,14 +146,19 @@ add (succ m) n = succ (add m n)
 mul : natural -> natural -> natural
 mul zero n = zero
 mul (succ m) n = add n (mul m n)
+\end{verbatim}}
 
+\newpage
 
-;; note that,
-;; in the following examples
-;; ''~'' can be readed as ``define-function'',
-;; ''+'' can be readed as ``define-type''.
+{\scriptsize\begin{verbatim}
+;; << composition-language >>
 
-<< composition-language >>
+;; In the following examples
+;; ``~'' can be readed as ``define-function'',
+;; ``+'' can be readed as ``define-type''.
+
+;; The syntax of type and function-body are unified, where
+;; a type is an arrow, and a function-body is a list of arrows.
 
 (+ natural (-> type)
    zero (-> natural)
@@ -185,57 +171,42 @@ mul (succ m) n = add n (mul m n)
 (~ mul (natural natural -> natural)
    (:m zero -> zero)
    (:m :n succ -> :m :n mul :m add))
+
+;; for example, take (:m :n succ -> :m :n mul :m add) of
+;; the function-body of ``mul''
+;;
+;;   it's antecedent is (:m :n succ)
+;;     :m   -- (-> natural)
+;;     :n   -- (-> natural)
+;;     succ -- (natural -> natural)
+;;   compose to (-> natural natural)
+;;
+;;   it's succedent is (:m :n mul :m add)
+;;     :m  -- (-> natural)
+;;     :n  -- (-> natural)
+;;     mul -- (natural natural -> natural)
+;;     :m  -- (-> natural)
+;;     add -- (natural natural -> natural))
+;;   compose to (-> natural)
+;;
+;; thus the type of ``mul'' is (natural natural -> natural)
 \end{verbatim}}
 
-\subsection{detailed explanation of above example}
+\subsection{Currying must be explicit}
 
-{\scriptsize\begin{verbatim}
-(note
-  the second arrow of the function body of
-  (~ mul (natural natural -> natural)
-     (:m zero -> zero)
-     (:m :n succ -> :m :n mul :m add))
-  which is
-  (:m :n succ -> :m :n mul :m add)
-  (note
-    the antecedent of (:m :n succ -> :m :n mul :m add)
-    is (:m :n succ)
-    it can be viewed as 3 functions composed together
-    the type of each of them are showed by the following list
-    ((:m (-> natural))
-     (:n (-> natural))
-     (succ (natural -> natural)))
-    the resulting type is
-    (-> natural natural))
-  (note
-    the succedent of (:m :n succ -> :m :n mul :m add)
-    is (:m :n mul :m add)
-    it can be viewed as 4 functions composed together
-    the type of each of them are showed by the following list
-    ((:m (-> natural))
-     (:n (-> natural))
-     (mul (natural natural -> natural))
-     (:m (-> natural))
-     (add (natural natural -> natural)))
-    the resulting type is
-    (-> natural)))
-\end{verbatim}}
-
-\subsection{currying must also be explicit}
-
-in type, input arguments and return values are made explicit. \\
+In type, input arguments and return values are made explicit. \\
 instead of {\scriptsize\verb|(natural -> natural -> natural)|}, \\
-we write {\scriptsize\verb|(natural natural -> natural)|}.
+We write {\scriptsize\verb|(natural natural -> natural)|}.
 
-thus, in function body, currying must also be explicit.
-we lost the implicit syntax for currying.
+Thus, in function body, currying must also be explicit.
+We lost the implicit syntax for currying,
 because currying is designed as a convention
 for the syntax of function application.
 
-\subsection{vector}
+\subsection{Vector}
 
 {\scriptsize\begin{verbatim}
-<< application-language >>
+;; << application-language >>
 
 data vector : natural -> type -> type where
   null : vector zero t
@@ -250,7 +221,7 @@ map f null       = null
 map f (cons e l) = cons (f e) (map f l)
 
 
-<< composition-language >>
+;; << composition-language >>
 
 (+ vector (natural type -> type)
    null (-> zero :t vector)
@@ -265,51 +236,47 @@ map f (cons e l) = cons (f e) (map f l)
    (:l :e cons :f -> :l :f map :e :f apply cons))
 \end{verbatim}}
 
-\subsection{unified syntax}
+\newpage
 
-the syntax of type and function-body are unified.
-a type is an arrow, a function-body is a list of arrows.
-
-\subsection{different optimization of syntax}
-
-\subsubsection{for function composition}
+\subsection{Function composition}
 
 {\scriptsize\begin{verbatim}
-<< application-language >>
+;; << application-language >>
+
 compose : {A B C : type} (A -> B) -> (B -> C) -> (A -> C)
 compose f g = λ x -> (f (g x))
 
 
-<< composition-language >>
+;; << composition-language >>
 
-;; the syntax is optimized for function composition.
-;; function composition is expressed by term concatenation.
+;; The syntax is optimized for function composition.
+;; Function composition is expressed by term concatenation.
 \end{verbatim}}
 
-\subsubsection{for function application}
+\subsection{Function application}
 
 {\scriptsize\begin{verbatim}
-<< application-language >>
+;; << application-language >>
 
-;; the syntax is optimized for function application.
-;; function application is expressed by term concatenation.
+;; The syntax is optimized for function application.
+;; Function application is expressed by term concatenation.
 
 
-<< composition-language >>
+;; << composition-language >>
 
 (~ apply (:a :b ... (:a :b ... -> :c :d ...) -> :c :d ...)
    (note it is implemented as a primitive-function))
 \end{verbatim}}
 
-\subsection{stack processing}
+\subsection{Stack processing}
 
-multiple return values are easily handled,
+Multiple return values are easily handled,
 and stack-processing functions can be used to help to
 re-order return values (without naming them) for function composition.
 (just like in forth \& joy)
 
 {\scriptsize\begin{verbatim}
-<< composition-language >>
+;; << composition-language >>
 
 (~ drop (:t ->)
    (:d ->))
@@ -327,46 +294,49 @@ re-order return values (without naming them) for function composition.
    (:d1 :d2 -> :d2 :d1))
 \end{verbatim}}
 
-\section{the correspondence}
 
-to show Curry–Howard correspondence under this syntax
-is to show, \\
-(1) how to view type as theorem? \\
-(2) how to view function as proof?
+\section{The correspondence}
 
-\subsection{type as theorem}
+To show Curry--Howard correspondence under this syntax,
+is to show: \\
+(1) How to view type as theorem? \\
+(2) How to view function as proof?
 
-with the ability to handle multiple return values,
-we can express ``and'' easily.
+\subsection{Type as theorem}
+
+With the ability to handle multiple return values,
+we can express ``and'' as:
 
 {\scriptsize\begin{verbatim}
 (A B -> C D) -- ``(A and B) implies (C and D)''
 \end{verbatim}}
 
-we can express ``for all'' and ``there exist'' in an unified way.
+we can express ``for all'' and ``there exist'' in an unified way:
 
 {\scriptsize\begin{verbatim}
 ((:x : A) -> :x P) -- ``for all x belong to A, we have P(x)''
 (-> (:x : A) :x P) -- ``there exist x belong to A, such that P(x)''
 \end{verbatim}}
 
-I call expression of form {\scriptsize\verb|(A B C ... -> E F G ...)|} sequent.
+I call expression of form {\scriptsize\verb|(A B C ... -> E F G ...)|} sequent,
 but you should note that,
-sequent for us, is not exactly the same as sequent for Gentzen.
-Gentzen views succedent as ``or'', while we view succedent as ``and''.
+sequent for us, is not exactly the same as sequent for Gentzen\cite{Gentzen}.
+Gentzen views succedent as ``or'', while we view succedent as ``and'':
 
 {\scriptsize\begin{verbatim}
-for Gentzen -- (A B -> C D) -- ``(A and B) implies (C or D)'',
-for us      -- (A B -> C D) -- ``(A and B) implies (C and D)''.
+for Gentzen -- (A B -> C D) -- ``(A and B) implies (C or D)''
+for us      -- (A B -> C D) -- ``(A and B) implies (C and D)''
 \end{verbatim}}
 
-\subsection{function as proof}
+\newpage
+
+\subsection{Function as proof}
 
 ``function as proof'' means,
 the way we write function body forms a language to record deduction.
-a record of many steps of deduction is called a proof.
+A record of many steps of deduction is called a proof.
 
-let us summarize deductive rules in sequent calculus in our language.
+Let us summarize deductive rules in sequent calculus in our language.
 I will omit some explicit contexts variables in the deductive rules,
 because in our language contexts can be implicit.
 
@@ -436,7 +406,9 @@ f : (A B -> C)
 : (A -> (B -> C))
 \end{verbatim}}
 
-\subsection{examples}
+\newpage
+
+\subsection{Example proofs}
 
 {\scriptsize\begin{verbatim}
 ;; have-equal-human-rights
@@ -494,39 +466,39 @@ f : (A B -> C)
        :q/s apply))
 \end{verbatim}}
 
-\section{algebra of logic}
+\section{The Algebra of logic}
 
-a concrete (not abstract) algebraic structure is rich when \\
+A concrete (not abstract) algebraic structure is rich when: \\
 (1) its elements have practical meaning. \\
 (2) it is equipped with many algebraic laws, which you can use to transform equations.
 
-a good example of such rich concrete algebraic structure
+A good example of such rich concrete algebraic structure
 is the field of multivariate rational function
 (i.e. quotient (or fraction) of multivariate polynomials),
 which is studied in algebraic geometry.
 
-since function composition already satisfies associative law,
+Since function composition already satisfies associative law,
 we have the opportunity to demonstrate an rich algebraic structure,
 the elements of which are formal theorems.
 
-we will try to define those algebraic operations that are closed in the set of derivable theorems.
-hopefully we will be able to capture all deductions by algebraic operations.
+We will try to define those algebraic operations that are closed in the set of derivable theorems.
+Hopefully we will be able to capture all deductions by algebraic operations.
 
-\subsection{to mimic fraction of natural number}
+\subsection{To mimic fraction of natural number}
 
-let us view theorem {\scriptsize\verb|(A -> B)|} as fraction,
+Let us view theorem {\scriptsize\verb|(A -> B)|} as fraction,
 {\scriptsize\verb|A|} as denominator,
 {\scriptsize\verb|B|} as numerator.
--- just like {\scriptsize\verb|(A \ B)|}.
+-- Just like {\scriptsize\verb|(A \ B)|}.
 (note that,
 we are using reverse-slash instead of slash,
 to maintain the order of {\scriptsize\verb|A B|} in {\scriptsize\verb|(A -> B)|})
 
-\subsection{multiplication}
+\subsection{Multiplication}
 
-to multiply two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|},
+To multiply two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|},
 we get {\scriptsize\verb|(A C -> B D)|}.
--- just like {\scriptsize\verb|(A \ B) (C \ D) = (A C \ B D)|}.
+-- Just like {\scriptsize\verb|(A \ B) (C \ D) = (A C \ B D)|}.
 
 {\scriptsize\begin{verbatim}
 (* r (A -> B))
@@ -542,18 +514,16 @@ we get {\scriptsize\verb|(A C -> B D)|}.
                (:x :y -> :x :r apply :y :s apply))))
 \end{verbatim}}
 
-theorems under multiplication is an Abelian group.
-identity element is {\scriptsize\verb|(->)|}.
-inverse of {\scriptsize\verb|(A -> B)|} is {\scriptsize\verb|(B -> A)|}.
+Theorems under multiplication is an Abelian group.
+Identity element is {\scriptsize\verb|(->)|}.
+Inverse of {\scriptsize\verb|(A -> B)|} is {\scriptsize\verb|(B -> A)|}.
 
-\subsection{first definition of addition}
+\subsection{First definition of addition}
 
-this definition recalls the fraction of natural number,
-but it seems not natural when written as function in our language.
-
-to add two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|},
-we get {\scriptsize\verb|(A B -> (B C or A D))|}.
--- just like {\scriptsize\verb|(A \ B) + (C \ D) = (A C \ (B C + A D))|}.
+This definition recalls the fraction of natural number. \\
+To add two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|}, \\
+we get {\scriptsize\verb|(A B -> (B C or A D))|}. \\
+-- Just like {\scriptsize\verb|(A \ B) + (C \ D) = (A C \ (B C + A D))|}.
 
 {\scriptsize\begin{verbatim}
 (* r (A -> B))
@@ -571,31 +541,28 @@ we get {\scriptsize\verb|(A B -> (B C or A D))|}.
                (:x :y -> :x :y :s apply))))
 \end{verbatim}}
 
-distributive is just like fraction of natural number,
+Distributive is just like fraction of natural number,
 because the way we define addition
 is just like the addition of fraction of natural number.
 
-theorems under addition is an Abelian semigroup.
-we do not have identity element,
+Theorems under addition is an Abelian semigroup.
+We do not have identity element,
 and we do not have inverse.
-- of course, we can introduce a ``zero-theorem''
-  (a theorem that we can never prove)
-  as the identity element of addition,
-  to make our algebraic structure more like fraction of natural number.
+(to make our algebraic structure more like fraction of natural number,
+we could introduce a ``zero-theorem''
+(a theorem that we can never prove)
+as the identity element of addition)
 
-under this definition of addition,
+Under this definition of addition,
 one may call the algebraic structure ``natural field'',
 to recall its similarites between the fraction of natural number.
-- note that,
-  other terms like 'semi-field' is ambiguous.
-  because it does not inform us
-  whether we mean addition is semi or multiplication is semi.
+(note that, term like ``semi-field'' is ambiguous,
+because it does not inform us
+whether we mean addition is semi or multiplication is semi)
 
-\subsection{second definition of addition}
+\subsection{Second definition of addition}
 
-this definition seems more natural in our language.
-
-to add two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|}, \\
+To add two theorems {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|}, \\
 we get {\scriptsize\verb|((A or B) -> (C or D))|}.
 
 {\scriptsize\begin{verbatim}
@@ -614,16 +581,16 @@ we get {\scriptsize\verb|((A or B) -> (C or D))|}.
                (:y {:y : :c} -> :y :s apply))))
 \end{verbatim}}
 
-distributive also hold under this definition of addition, \\
+Distributive also hold under this definition of addition, \\
 because {\scriptsize\verb|(-> A (B or C))|} is the same as {\scriptsize\verb|(-> (A B or A C))|}.
 
-theorems under addition is an Abelian semigroup.
-identity element is {\scriptsize\verb|(->)|},
+Theorems under addition is an Abelian semigroup.
+Identity element is {\scriptsize\verb|(->)|},
 but we do not have inverse.
 
-\subsection{term-lattice, and cut as weaken}
+\subsection{Term-lattice, and cut as weaken}
 
-this is where we must take term-lattice into account.
+This is where we must take term-lattice into account.
 
 {\scriptsize\begin{verbatim}
 | term                   | lattice          |
@@ -640,7 +607,7 @@ I call it ``term-lattice'',
 because I want to make explicit its relation with term-rewriting-system
 (I will address the detail of term-lattice in another paper).
 
-if we have {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|}, \\
+If we have {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|}, \\
 we can cut them only when {\scriptsize\verb|(C cover B)|}. \\
 for example, when:
 
@@ -652,128 +619,156 @@ for example, when:
 \end{verbatim}}
 
 cut can be viewed as an important way to weaken a theorem.
-we can first multiply {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|} to {\scriptsize\verb|(A C -> B D)|},
-then weaken it to {\scriptsize\verb|(A -> D)|}, provides that {\scriptsize\verb|(C cover B)|}.
+We can first multiply {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(C -> D)|} to {\scriptsize\verb|(A C -> B D)|},
+then weaken it to {\scriptsize\verb|(A -> D)|}, provided that {\scriptsize\verb|(C cover B)|}.
 
-we can also extend the lattice operations to cedent (antecedent and succedent),
+We can also extend the lattice operations to cedent (antecedent and succedent),
 because cedent is Cartesian product of term.
 
-\subsection{equality of theorem}
+\subsection{Equality of theorem}
 
-we can define {\scriptsize\verb|A == B|}, as {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(B -> A)|}.
+We can define {\scriptsize\verb|A == B|}, as {\scriptsize\verb|(A -> B)|} and {\scriptsize\verb|(B -> A)|}.
 
-\subsection{constructiveness}
+\subsection{Constructiveness}
 
-in our language, we have the following keywords to do definitions:
+In our language, we have the following keywords that make definitions:
 
 {\scriptsize\begin{verbatim}
-| keyword | read as                                | function-body |
-|---------+----------------------------------------+---------------|
-| ``+''   | define-type, define-data               | trivial       |
-| ``~''   | proof, define-theorem, define-function | non-trivial   |
-| ``*''   | assume, define-hypothesis              | no            |
+| keyword | read as                           | function-body |
+|---------+-----------------------------------+---------------|
+| +       | define-type an data               | trivial       |
+| ~       | proof, define-function or theorem | non-trivial   |
+| *       | assume, define-hypothesis         | non           |
 \end{verbatim}}
 
-whenever we have function-body, be it trivial or non-trivial,
+Whenever we have function-body, be it trivial or non-trivial,
 we can use it to rewrite data.
 
-for example, \\
-the function-body of {\scriptsize\verb|succ|} is trivial, \\
-it rewrites {\scriptsize\verb|zero|} to {\scriptsize\verb|zero succ|}, \\
-i.e. merely add a symbol to the data. \\
-while the function-body of {\scriptsize\verb|add|} is non-trivial, \\
-it rewrites {\scriptsize\verb|zero succ zero succ|} \\
-to {\scriptsize\verb|zero succ succ|}.
+For example,
+the function-body of {\scriptsize\verb|succ|} is trivial,
+it rewrites {\scriptsize\verb|zero|} to {\scriptsize\verb|zero succ|} (i.e. merely add a symbol to the data),
+while the function-body of {\scriptsize\verb|add|} is non-trivial,
+it rewrites {\scriptsize\verb|zero succ zero succ|} to {\scriptsize\verb|zero succ succ|}.
 
-whenever we use ``*'' to introduce a hypothesis,
-the constructiveness of function is lost,
-although we still can use it to define functions
+Whenever we use ``*'' to introduce a hypothesis,
+the constructiveness of function is lost, because there is no function-body.
+Although we still can use it to define functions
 and type check the definitions,
 we can not use it to rewrite data.
 (but abstractiveness is gained,
 I will address the detail of the balance
 between constructiveness and abstractiveness in another paper)
 
-\subsection{algebraic extension}
+\subsection{Algebraic extension}
 
-then defining a new types by ``+'',
+When defining a new types by ``+'',
 we provide a type-constructor,
 and a list of data-constructors.
 
-by introducing such constructors,
-we are extending our algebraic structure.
-(just like field extension by root of equations)
+By introducing such constructors,
+we will extend our algebraic structure.
+(just like extending a field by the roots of equations)
 
-\section{implementation}
+\newpage
+
+\section{Implementation}
 
 I made an attempt to implement a prototype of the language,
-project page at {\scriptsize\verb|http://xieyuheng.github.io/sequent1|}
+project page at {\scriptsize\verb|http://xieyuheng.github.io/sequent1|}.
+The implementation is a interpreter written in scheme.
 
-\subsection{implementation-tech}
+\subsection{Implementation-tech}
 
-during writing the prototype language,
-I noticed the language is not necessarily stack-based.
+During writing the prototype language,
+I noticed the language is not necessarily stack-based,
 and we have the following relations:
 
 {\scriptsize\begin{verbatim}
-| implementation-tech     | the natural of language       |
-|-------------------------+-------------------------------|
-| stack-based computation | call-by-value (non-lazy-eval) |
-| term-rewriting-system   | call-by-name (lazy-eval)      |
-| graph-rewriting-system  | call-by-need (lazy-eval)      |
+| implementation-tech     | evaluation strategy |
+|-------------------------+---------------------|
+| stack-based computation | call-by-value       |
+| term-rewriting-system   | call-by-name        |
+| graph-rewriting-system  | call-by-need        |
 \end{verbatim}}
 
-first few versions of sequent1 is implemented as a stack-based language,
-only later, changed to term-rewriting-system.
+First few versions of sequent1 is implemented as a stack-based language,
+only later, changed to term-rewriting-system,
 because we have to handle lazy-trunk in the language,
 and in a term-rewriting-system,
 I can handle lazy-trunk in an unified implicit way.
 
-\subsection{mistakes in my implementation}
+\subsection{Mistakes in my implementation}
 
-this prototype has the following mistakes
+This prototype has the following mistakes
 to be fixed in the next versions of the prototype.
 
 (1) I fail to far see that
 the structure of reports, which returned by various checkers,
-must be highly structured data, instead of string.
-thus, I fail to print useful reports when checkers find mistakes in code.
+must be highly structured data instead of string,
+thus I fail to print useful reports when checkers find mistakes in code.
 
 (2) I know graph-rewriting-system is needed,
-but I did not implement the language by it.
+but I did not implement the language by it,
 because I want to keep the prototype simple.
 
-(3) can not handle mutual recursive function.
+(3) The prototype can not handle mutual recursive function.
 
-(4) can not handle un-named ``or''.
+(4) The prototype can not handle un-named ``or''.
 
-(5) the meaning of equality is not fully understood.
+(5) The meaning of equality is not fully understood.
 
-(6) not yet designed a good mechanism for abstractiveness.
+(6) I have not yet designed a satisfactory mechanism to handle abstractiveness.
 
-\subsection{further work}
+\section{Further work}
 
-I planed to
+I plan to:
 
-(1) develop the algebra of logic further.
+(1) develop further the algebra of logic.
 
-(2) handled ``equality'' carefully,
+(2) handle ``equality'' carefully,
 and use the language as a concrete tool
 to investigate algebraic topology.
 
-\subsection{conclusion}
-
 \acks
 
-I would like to thank my friend Jason Hemann, for his very valuable advice about this paper.
+I would like to thank my friend Jason Hemann, for his very valuable advice about this paper. I also would like to thank SZDIY community, for it provided me a place to work and live last year.
+
+\newpage
 
 \bibliographystyle{abbrvnat}
-% The bibliography should be embedded for final submission.
 
-\begin{thebibliography}{}
-  \softraggedright
-  %% \bibitem[Smith et~al.(2009)Smith, Jones]{smith02}
-  %% P. Q. Smith, and X. Y. Jones. ...reference text...
+\begin{thebibliography}{10}
+
+\bibitem{Hott}
+  The Univalent Foundations Program (2013),
+  \emph{Homotopy Type Theory -- Univalent Foundations of Mathematics}.
+
+\bibitem{Pfenning}
+  Frank Pfenning, Joint work with Luís Caires, Bernardo Toninho, and Dennis Griffith. \\
+  \emph{From Linear Logic to Session-Typed Concurrent Programming}, \\
+  Tutorial at POPL 2015, Mumbai, India, January 2015
+
+\bibitem{Gentzen}
+  Gentzen Gerhard (1969), M. E., Szabo, ed., \\
+  \emph{Collected Papers of Gerhard Gentzen}, \\
+  Paper \#3: \emph{INVESTIGATIONS INTO LOGICAL DEDUCTION (1935)}. \\
+  -- In this paper the deduction rules of sequent calculus are formed.
+
+\bibitem{Hertz}
+  Paul Hertz (1922), \emph{On Axiomatic Systems for Arbitrary Systems of Sentences, Part I, Sentences of the First Degree (On Axiomatic Systems of the Smallest Number of Sentences and the Concept of the Ideal Element)}.\\
+  -- This paper inspired Gentzen to design his sequent calculus.
+
+\bibitem{Norell}
+  Ulf Norell (2007), \emph{Towards a practical programming language based on dependent type theory}. \\
+  -- This paper describe the design of agda.
+
+\bibitem{Brady}
+  Edwin Brady (2013), \emph{Idris, a General Purpose Dependently Typed Programming Language: Design and Implementation}, \\
+  Journal of Functional Programming, August 2013.
+
+\bibitem{wikipedia}
+  The wikipedia page of ``Curry--Howard correspondence'', \\
+  at the time when this paper is written.
 
 \end{thebibliography}
 
