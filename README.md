@@ -1,5 +1,5 @@
 # My Papers
 
-<https://papers.fidb.app>
+<https://papers.xieyuheng.com>
 
 <https://xieyuheng.com>
